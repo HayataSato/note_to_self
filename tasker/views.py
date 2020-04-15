@@ -9,7 +9,7 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from .models import Task, Summary
 from .forms import TaskForm, SummaryForm
-
+from .esa import QueryEsa
 
 @login_required
 def index(request):
@@ -112,23 +112,34 @@ class SummaryList(ListView):
 
 def summary_edit(request, task_id, summary_id=None):
     """summaryの編集"""
-    task = get_object_or_404(Task, pk=task_id)  # 親の書籍を読む
-    if summary_id:   # 修正時：summary_id が指定されている
-        summary = get_object_or_404(Summary, pk=summary_id)
-    else:               # 追加時：summary_id が指定されていない
+    task = get_object_or_404(Task, pk=task_id)  # 親の書籍を読み込み
+    if summary_id is None:  # 作成時：summary_id が指定されていない
         summary = Summary()
-
+        f_new = True
+    else:                   # 修正時：summary_id が指定されている
+        summary = get_object_or_404(Summary, pk=summary_id)
+        f_new = False  # esa用の新規投稿フラグ (post or patch)
+    # HTTPメソッドが POST のとき
     if request.method == 'POST':
         form = SummaryForm(request.POST, instance=summary)  # POST された request データからフォームを作成
-        if form.is_valid():    # フォームのバリデーション
+        # DBへ反映
+        if form.is_valid():  # フォームのバリデーション結果に応じて分岐 (フォームに入力された値にエラーがないかをバリデート)
             summary = form.save(commit=False)
             summary.task = task  # この感想の、親の書籍をセット
-            summary.save()
-            try:
-                return redirect('tasker:summary_detail', summary_id=summary_id)
-            except:
-                return redirect('tasker:summary_list', task_id=task_id)
-    else:    # GET の時
+            # esa API
+            req = QueryEsa()
+            if f_new:  # 作成時：フラグTrue
+                res = req.post(taskname=task.name, taskcategory=task.category, title=summary.title, summary=summary.summary)
+                summary.esa_id = res.json()["number"]  # DBのesaidをセット
+            else:      # 修正時：フラグFalse
+                req.patch(id=summary.esa_id, taskname=task.name, taskcategory=task.category, title=summary.title, summary=summary.summary)
+            summary.save()  # 反映
+        try:
+            return redirect('tasker:summary_detail', summary_id=summary_id)
+        except:
+            return redirect('tasker:summary_list', task_id=task_id)
+    # HTTPメソッドが GET のとき
+    else:
         form = SummaryForm(instance=summary)  # summary インスタンスからフォームを作成
 
     return render(request,
@@ -136,15 +147,20 @@ def summary_edit(request, task_id, summary_id=None):
                   dict(form=form, task_id=task_id, summary_id=summary_id))
 
 
-def summary_del(request, task_id, summary_id):
-    """summaryの削除"""
-    summary = get_object_or_404(Summary, pk=summary_id)
-    summary.delete()
-    return redirect('tasker:summary_list', task_id=task_id)
-
-
 def summary_detail(request, summary_id):
     summary = Summary.objects.get(id=summary_id)
     return render(request, 'tasker/summary_detail.html', {
         'summary': summary,
     })
+
+
+def summary_del(request, task_id, summary_id):
+    """summaryの削除"""
+    summary = get_object_or_404(Summary, pk=summary_id)
+    # esaAPIから削除
+    req = QueryEsa()
+    req.delete(id=summary.esa_id)
+    # DBから削除
+    summary.delete()
+    return redirect('tasker:summary_list', task_id=task_id)
+

@@ -26,12 +26,13 @@ class Task(models.Model):
 
 
 class Summary(models.Model):
-    """ まとめ(子モデル) """
+    """ まとめのマークダウン(子モデル) """
     task = models.ForeignKey(Task, verbose_name='task', related_name='summaries', on_delete=models.CASCADE)
     title = models.CharField(default="", max_length=100, blank=False)
     summary = MarkdownxField('', help_text='Markdown形式で書いてください。')
     rgst = models.DateTimeField(default=timezone.now)
     updt = models.DateTimeField(auto_now=True)
+    esa_id = models.IntegerField(blank=True, null=True, default=0)
 
     def __str__(self):
         return self.summary
