@@ -1,0 +1,11 @@
+*.pyc
+*~
+/.vscode
+__pycache__
+db.sqlite3
+/static
+/hist_tasker/static/
+.env
+venv
+codes.txt
+run_console.txt

@@ -1,0 +1,191 @@
+{% extends 'tasker/base.html' %}
+{% load static %}
+
+{% block title %}Hist Tasker{% endblock title %}
+
+{% block content %}
+<div class="contents_box">
+    <h4 class="mt-5 mb-4 border-bottom">Todo List</h4>
+    <br>
+    <a href="{% url 'tasker:task_add' %}" class="btn btn-primary btn-sm my-3 float-right px-3 mr-1">Add</a>
+    <div class="todo_list table-responsive">
+        <table class="table table-striped table-bordered text-nowrap">
+          <thead>
+            <tr>
+              <th scope="col">Task</th>
+              <th scope="col">Category</th>
+              <th scope="col">Time-taken</th>
+              <th scope="col">Reg-date</th>
+              <th scope="col">Ops</th>
+              <th scope="col" class="text-center" >Priority</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for task in task %}
+                {% if task.status == False %}
+                    <tr>
+                      <td class="task_name align-middle position-relative">
+                          <a class="stretched-link text-decoration-none" href="{% url 'tasker:summary_list' task_id=task.id %}">{{ task.name }}</a>
+                      </td>
+                      <td class="task_time align-middle">{{ task.category }}</td>
+                      <td class="task_time align-middle">{{ task.time }}</td>
+                      <td class="task_rgst align-middle">{{ task.rgst }}</td>
+                      <td class="task_ops" >
+                        <div class="d-flex flex-row justify-content-around align-items-center">
+                            <button class="btn btn-outline-primary btn-sm done_confirm" data-toggle="modal" data-target="#doneModal" data-name="{{ task.name }}" data-url="{% url 'tasker:task_status' task_id=task.id %}">Done</button>
+                            <a href="{% url 'tasker:task_edit' task_id=task.id %}" class="btn btn-outline-info btn-sm">Mod</a>
+                            <button class="btn btn-outline-danger btn-sm del_confirm" data-toggle="modal" data-target="#deleteModal" data-name="{{ task.name }}" data-url="{% url 'tasker:task_del' task_id=task.id %}">Del</button>
+                        </div>
+                      </td>
+                      <th scope="row" class="task_pri align-middle text-center">{{ task.pri }}</th>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+
+    {# Up count timer run with js #}
+    <div class="mt-3 pb-5">
+        <h1 id="timerLabel">00:00</h1>
+        <input type="button" class="myButton" onclick="start()" value="START" id="startBtn">
+        <input type="button" class="myButton" onclick="stop()" value="STOP">
+        <input type="button" class="myButton" onclick="reset()" value="RESET">
+    </div>
+    {# END Up count timer run with js #}
+
+    {# Archives of task with DataTable #}
+    <h4 class="mt-5 mb-4 border-bottom">Archives</h4>
+    <br>
+    <div class="mt-3 mb-5 archive_todo_list table-responsive">
+        <table class="table datatable table-striped table-bordered  text-nowrap">
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Category</th>
+                    <th>Time-taken</th>
+                    <th>Reg-date</th>
+                    <th>Ops</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    {# Archives of task with DataTable #}
+
+    {# Modal dialog to delete instance pointed by pk (task_id) #}
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Confirm</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+              <p> Are you sure you want to remove the instance "<b><span id="del_task_name"></span></b>"？</p></n>
+              <p> Related summary articles will be removed too.</p>
+          </div>
+          <div class="modal-footer">
+            <a href="#" class="btn btn-primary" id="del_url">OK</a>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {# END Modal dialog to delete instance pointed by pk (task_id) #}
+
+    {# Modal dialog to make done of task status pointed by pk (task_id) #}
+    <div class="modal fade" id="doneModal" tabindex="-1" role="dialog" aria-labelledby="doneModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="doneModalLabel">Confirm</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+              <p> Are you sure you want to archive the task "<b><span id="done_task_name"></span></b>"？</p>
+          </div>
+          <div class="modal-footer">
+            <a href="#" class="btn btn-primary" id="done_url">OK</a>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {# END Modal dialog to done task pointed by pk (task_id) #}
+
+    {# Modal dialog to make restore of task status pointed by pk (task_id) #}
+    <div class="modal fade" id="restoreModal" tabindex="-1" role="dialog" aria-labelledby="restoreModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="restoreModalLabel">Confirm</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+              <p> Are you sure you want to restore the task "<b><span id="restore_task_name"></span></b>"？</p>
+          </div>
+          <div class="modal-footer">
+            <a href="#" class="btn btn-primary" id="restore_url">OK</a>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {# END Modal dialog to restore task pointed by pk (task_id) #}
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<!-- timer -->
+<script type="text/javascript" src="{% static 'tasker/js/get_task_time.js' %}"></script>
+<script type="text/javascript" src="{% static 'tasker/js/timer.js' %}"></script>
+
+<!-- modal -->
+<script>
+$(function() {
+  $('.del_confirm').on('click', function () {
+     $("#del_task_name").text($(this).data("name"));
+     $('#del_url').attr('href', $(this).data("url"));
+  });
+});
+$(function() {
+  $('.done_confirm').on('click', function () {
+     $("#done_task_name").text($(this).data("name"));
+     $('#done_url').attr('href', $(this).data("url"));
+  });
+});
+$(function() {
+  $('.restore_confirm').on('click', function () {
+     $("#restore_task_name").text($(this).data("name"));
+     $('#restore_url').attr('href', $(this).data("url"));
+  });
+});
+</script>
+
+<!-- Define "DataTable" and setting onClick functions for Ops-buttons on DT -->
+<script>
+$(document).ready(function() {
+
+    var table = $('.datatable').DataTable({
+        "processing": true,
+        "serverSide": true,
+        "ajax": "{% url 'tasker:archive' %}",
+        "order": [[3, "desc"]],
+        "columnDefs": [
+        { className:"position-relative", "targets":[0] }
+        ],
+    });
+
+    $('.datatable tbody').on( 'click', '.restore_confirm', function () {
+        $("#restore_task_name").text($(this).data("name"));
+        $('#restore_url').attr('href', $(this).data("url"));
+    } );
+
+    $('.datatable tbody').on( 'click', '.del_confirm', function () {
+        $("#del_task_name").text($(this).data("name"));
+        $('#del_url').attr('href', $(this).data("url"));
+    } );
+
+});
+</script>
+{% endblock %}
