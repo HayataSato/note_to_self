@@ -23,6 +23,7 @@ load_dotenv('.env')
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ESA_TOKEN = os.getenv("ESA_TOKEN")
+ESA_TEAMNAME = os.getenv("ESA_TEAMNAME")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
