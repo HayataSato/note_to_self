@@ -19,6 +19,14 @@
                 <a href="{% url 'tasker:summary_mod' task_id=summary.task.id summary_id=summary.id %}" class="btn btn-outline-primary float-right">Mod</a>
             </div>
         </div>
+        {# esa更新エラー用メッセージ #}
+            {% if messages %}
+            <ul class="list-unstyled">
+              {% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message | safe }}</li>
+              {% endfor %}
+            </ul>
+        {% endif %}
         <a class="btn btn-secondary" href="{% url 'tasker:summary_list' task_id=summary.task.id %}">Back</a>
     </div>
 </div>

@@ -39,11 +39,11 @@ class QueryEsa:
         self.ENDPOINT = f'https://api.esa.io/v1/teams/{ESA_TEAMNAME}/'
 
     # 新規投稿
-    def post(self, taskname, taskcategory, title, summary):
+    def post(self, task, summary):
         try:
-            body = dict(post=dict(name=title,
-                                  body_md=summary,
-                                  category=f"Book/{taskcategory}/{taskname}",
+            body = dict(post=dict(name=summary.title,
+                                  body_md=summary.summary,
+                                  category=f"Book/{task.category}/{task.name}",
                                   wip=False))
             res = self.session.post(self.ENDPOINT + "/posts",
                                     data=json.dumps(body).encode('utf-8'))
@@ -51,29 +51,29 @@ class QueryEsa:
                 raise APIError(res.status_code)
             return res
         except APIError as e:
-            print(e)
+            return e.__str__()
 
     # 修正
-    def patch(self, id, taskname, taskcategory, title, summary):
+    def patch(self, task, summary):
         try:
-            body = dict(post=dict(name=title,
-                                  body_md=summary,
-                                  category=f"Book/{taskcategory}/{taskname}",
+            body = dict(post=dict(name=summary.title,
+                                  body_md=summary.summary,
+                                  category=f"Book/{task.category}/{task.name}",
                                   wip=False))
-            res = self.session.patch(self.ENDPOINT + "/posts/" + str(id),
+            res = self.session.patch(self.ENDPOINT + "/posts/" + str(summary.esa_id),
                                      data=json.dumps(body).encode('utf-8'))
             if re.match(r'[^2]', str(res.status_code)):
-                raise
+                raise APIError(res.status_code)
             return res
         except APIError as e:
-            print(e)
+            return e.__str__()
 
     # 削除
-    def delete(self, id):
+    def delete(self, esa_id):
         try:
-            res = self.session.delete(self.ENDPOINT + "/posts/" + str(id))
+            res = self.session.delete(self.ENDPOINT + "/posts/" + str(esa_id))
             if re.match(r'[^2]', str(res.status_code)):
-                raise
+                raise APIError(res.status_code)
             return res
         except APIError as e:
-            print(e)
+            return e.__str__()

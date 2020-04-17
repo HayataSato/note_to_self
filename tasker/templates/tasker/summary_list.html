@@ -7,7 +7,7 @@
     <h4 class="mt-5 border-bottom">Summary List</h4>
     <br>
     <h4 class="text-muted">{{ task.name }}</h4>
-    <a href="{% url 'tasker:summary_add' task_id=task.id %}" class="btn btn-primary btn-sm my-3 float-right px-3 mr-1">Add</a>
+    <a href="{% url 'tasker:summary_add' task_id=task.id %}" class="btn btn-primary my-3 float-right px-3 mr-1">Add</a>
     <div class="summary_list table-responsive">
         <table class="table table-striped table-bordered text-nowrap">
           <thead>
@@ -63,10 +63,19 @@
     {% endif %}
     {# End Pagination #}
 
+    {# esa更新エラー用メッセージ #}
+    {% if messages %}
+    <ul class="list-unstyled">
+      {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message | safe }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
     <a href="{% url 'tasker:index' %}" class="btn btn-secondary btn">Back</a>
 
     {# Modal dialog to delete instance pointed by pk (summary_id) #}
-    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteModal" style="padding-right:0px;" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">

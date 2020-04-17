@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 import dj_database_url
-
+from django.contrib.messages import constants as messages
 from dotenv import load_dotenv
 
 
@@ -148,3 +148,8 @@ MARKDOWNX_MARKDOWN_EXTENSIONS = [
     'markdown.extensions.toc',
 ]
 MARKDOWNX_IMAGE_MAX_SIZE = {'size': (2000, 2000), 'quality': 100}
+
+# messageにcss classを付加
+MESSAGE_TAGS = {
+    messages.WARNING: 'alert alert-danger',
+}
