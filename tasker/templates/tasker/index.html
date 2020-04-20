@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="contents_box">
-    <h4 class="mt-5 mb-4 border-bottom">Todo List</h4>
+    <h4 class="mt-5 mb-3 border-bottom">Todo List</h4>
     <br>
     <a href="{% url 'tasker:task_add' %}" class="btn btn-primary my-3 float-right px-3 mr-1">Add</a>
     <div class="todo_list table-responsive">
@@ -45,19 +45,23 @@
         </table>
     </div>
 
-    {# Up count timer run with js #}
-    <div class="mt-3 pb-5">
-        <h1 id="timerLabel">00:00</h1>
-        <input type="button" class="myButton" onclick="start()" value="START" id="startBtn">
-        <input type="button" class="myButton" onclick="stop()" value="STOP">
-        <input type="button" class="myButton" onclick="reset()" value="RESET">
-    </div>
-    {# END Up count timer run with js #}
+    <br>
+    <!--
+        {# Up count timer run with js #}
+        <div class="mt-3 pb-5">
+            <h1 id="timerLabel">00:00</h1>
+            <input type="button" class="myButton" onclick="start()" value="START" id="startBtn">
+            <input type="button" class="myButton" onclick="stop()" value="STOP">
+            <input type="button" class="myButton" onclick="reset()" value="RESET">
+        </div>
+        {# END Up count timer run with js #}
+    -->
+    <br>
 
     {# Archives of task with DataTable #}
     <h4 class="mt-5 mb-4 border-bottom">Archives</h4>
     <br>
-    <div class="mt-3 mb-5 archive_todo_list table-responsive">
+    <div class="mt-2 mb-5 archive_todo_list table-responsive">
         <table class="table datatable table-striped table-bordered  text-nowrap">
             <thead>
                 <tr>
@@ -136,10 +140,10 @@
 {% endblock content %}
 
 {% block extra_js %}
-<!-- timer -->
-<script type="text/javascript" src="{% static 'tasker/js/get_task_time.js' %}"></script>
-<script type="text/javascript" src="{% static 'tasker/js/timer.js' %}"></script>
-
+<!-- timer
+    <script type="text/javascript" src="{% static 'tasker/js/get_task_time.js' %}"></script>
+    <script type="text/javascript" src="{% static 'tasker/js/timer.js' %}"></script>
+-->
 <!-- modal -->
 <script>
 $(function() {
