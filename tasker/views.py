@@ -5,7 +5,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
-from django.views.generic.list import ListView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from .models import Task, Summary
@@ -96,16 +95,18 @@ def task_del(request, task_id):
     return redirect('tasker:index')
 
 
-class SummaryList(ListView):
+class SummaryList(generic.ListView):
     """ Summaryの一覧 """
+    # ListViewを使用してページネーションを実装
     context_object_name = 'summaries'
     template_name = 'tasker/summary_list.html'
-    paginate_by = 10  # １ページは最大10件ずつでページングする
+    paginate_by = 10  # 1ページあたりの表示件数
 
     def get(self, request, *args, **kwargs):
-        task = get_object_or_404(Task, pk=kwargs['task_id'])  # 親の書籍を読む
-        summaries = task.summaries.all().order_by('-updt')   # 書籍の子供の、感想を読む
+        task = get_object_or_404(Task, pk=kwargs['task_id'])  # 親モデル=raskの取得
+        summaries = task.summaries.all().order_by('-updt')   # 任意のtaskに紐付いた子モデル=summaryの取得(更新日が若い順に並べる)
         self.object_list = summaries
+        # get_context_dataにリストにしたいQuerySetオブジェクトを渡せばおｋ
         context = self.get_context_data(object_list=self.object_list, task=task)
         return self.render_to_response(context)
 
