@@ -1,1 +1,1 @@
-web: python manage.py collectstatic --noinput ; gunicorn hist_tasker.wsgi --log-file -
+web: python manage.py collectstatic --noinput ; gunicorn note_to_self.wsgi --log-file -

@@ -1,0 +1,25 @@
+{% extends "book_manager/base.html" %}
+
+{% load bootstrap4 %}
+
+{% block title %}Edit book -- NOTE TO SELF{% endblock title %}
+
+{% block content %}
+<div class="contents_box">
+    <h4 class="mt-5 mb-4 border-bottom">Edit book</h4>
+    {% if book_id %}
+    <form action="{% url 'book_manager:book_edit' book_id=book_id %}" method="post">
+    {% else %}
+    <form action="{% url 'book_manager:book_add' %}" method="post">
+    {% endif %}
+      {% csrf_token %}
+      {% bootstrap_form form layout='horizontal' %}
+      <div class="form-group row">
+        <div class="offset-md-3 col-md-9">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </form>
+    <a href="{% url 'book_manager:index' %}" class="btn btn-secondary">Back</a>
+</div>
+{% endblock content %}

@@ -1,0 +1,39 @@
+{% extends 'book_manager/base.html' %}
+{% load app %}
+
+{% block title %} {{ summary.book.name }} -- {{ summary.title }} -- NOTE TO SELF{% endblock title %}
+
+{% block content %}
+<div class="contents_box table-responsive">
+    <div class="">
+        <h4 class="mt-5 border-bottom">Summary Detail</h4>
+        <br>
+        <h4 class="text-muted">{{ summary.book.name }}</h4>
+        <a href="{% url 'book_manager:summary_mod' book_id=summary.book.id summary_id=summary.id %}" class="btn btn-outline-primary float-right">Mod</a>
+        <br>
+        <div class="mt-5 mb-5 card">
+            <h2 class="card-header">{{ summary.title }}</h2>
+            <div class="card-body">{{ summary.summary | markdown_to_html }}</div>
+            <div class="card-footer">
+                <p>update：{{ summary.updt }}</p>
+                <a href="{% url 'book_manager:summary_mod' book_id=summary.book.id summary_id=summary.id %}" class="btn btn-outline-primary float-right">Mod</a>
+            </div>
+        </div>
+        {# esa更新エラー用メッセージ #}
+            {% if messages %}
+            <ul class="list-unstyled">
+              {% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message | safe }}</li>
+              {% endfor %}
+            </ul>
+        {% endif %}
+        <a class="btn btn-secondary" href="{% url 'book_manager:summary_list' book_id=summary.book.id %}">Back</a>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+{% endblock extra_js %}
