@@ -1,6 +1,6 @@
 {
   "background_color": "#1f1f1f",
-  "description": "To-do list considers working time with PWA",
+  "description": "Reading list considers working time with PWA",
   "display": "standalone",
   "theme_color": "aliceblue",
   "icons": [{
@@ -12,7 +12,7 @@
     "sizes": "512x512",
     "type": "image/png"
   }],
-  "name": "note_to_self",
-  "short_name": "note_to_self",
+  "name": "note to self",
+  "short_name": "note to self",
   "start_url": "https://note-to-selfffff.herokuapp.com/"
 }
