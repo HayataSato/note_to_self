@@ -15,7 +15,7 @@
     <title>{% block title %}Note to Self -login-{% endblock title %}</title>
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/book_manager/sw.js').then(function() { console.log('Service Worker Registered'); });
+            navigator.serviceWorker.register('sw.js').then(function() { console.log('Service Worker Registered'); });
             }
     </script>
 </head>
@@ -29,7 +29,7 @@
                 <a class="mb-2" href="{% url 'logout' %}">Log out</a>
             </div>
           {% else %}
-            <h1>Welcome to Note to Self</h1>
+            <h1>Welcome to NOTE TO SELF</h1>
             <p>Please authentication</p>
             <a href="{% url 'login' %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a>
           {% endif %}
