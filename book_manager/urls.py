@@ -7,7 +7,7 @@ from . import views
 app_name = 'book_manager'
 
 urlpatterns = [
-    path('sw.js', (TemplateView.as_view(template_name="sw.js", content_type='application/javascript', )), name='sw.js'),
+    path('sw.js', (TemplateView.as_view(template_name="./sw.js", content_type='application/javascript', )), name='sw.js'),
     path('', views.index, name='index'),
     path('archive/', views.ArchiveBookDT.as_view(), name='archive'),
     path('add/', views.book_edit, name='book_add'),
