@@ -8,7 +8,8 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('sw.js', (TemplateView.as_view(template_name="book_manager/sw.js", content_type='application/javascript', )), name='sw.js'),    path('', include('book_manager.urls')),
+    path('sw.js', (TemplateView.as_view(template_name="book_manager/sw.js", content_type='application/javascript', )), name='sw.js'),
+    path('', include('book_manager.urls')),
     path('accounts/login/', views.LoginView.as_view(), name='login'),
     path('accounts/logout/', views.LogoutView.as_view(next_page='/'), name='logout'),
     path('markdownx/', include('markdownx.urls')),
