@@ -1,5 +1,4 @@
 from django.contrib import admin
-from markdownx.admin import MarkdownxModelAdmin
 from .models import Category, Book, Summary
 
 
@@ -15,7 +14,7 @@ class BookAdmin(admin.ModelAdmin):
     ordering = ('id', 'status',)
 
 
-class SummaryAdmin(MarkdownxModelAdmin):
+class SummaryAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'updt', 'rgst')
     list_display_links = ('id', 'title',)
     ordering = ('id',)

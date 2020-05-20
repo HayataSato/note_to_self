@@ -3,7 +3,7 @@
 from django.db import migrations, models
 import django.db.models.deletion
 import django.utils.timezone
-import markdownx.models
+import mdeditor.fields
 
 
 class Migration(migrations.Migration):
@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(default='', max_length=100)),
-                ('summary', markdownx.models.MarkdownxField(help_text='Markdown形式で書いてください。', verbose_name='')),
+                ('summary', mdeditor.fields.MDTextField(verbose_name='')),
                 ('rgst', models.DateTimeField(default=django.utils.timezone.now)),
                 ('updt', models.DateTimeField(auto_now=True)),
                 ('esa_id', models.IntegerField(blank=True, default=0, null=True)),

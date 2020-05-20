@@ -4,7 +4,6 @@
 __pycache__
 db.sqlite3
 /static
-/note_to_self/static/
 .env
 venv
 codes.txt

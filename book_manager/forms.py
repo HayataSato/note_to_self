@@ -1,5 +1,5 @@
 from django import forms
-from markdownx.fields import MarkdownxFormField
+from mdeditor.fields import MDTextField
 from .models import Book, Summary
 
 
@@ -27,8 +27,8 @@ class SummaryForm(forms.ModelForm):
             'title': 'title',
             'summary': 'summary',
         }
-        summary = MarkdownxFormField()
+        summary = MDTextField()
         widgets = {
             'title': forms.TextInput(attrs={'size': "50"}),
-            'summary': forms.Textarea(attrs={'rows': 6, 'cols': 22, 'style': 'resize:none;'})
+            # 'summary': forms.Textarea(attrs={'rows': 6, 'cols': 22, 'style': 'resize:none;'})
         }

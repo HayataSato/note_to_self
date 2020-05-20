@@ -2,6 +2,7 @@
 {% load widget_tweaks %}
 {% block title %}Edit summary -- Note to Self{% endblock title %}
 
+
 {% block content %}
 <div class="contents_box">
     <h4 class="mt-5 mb-5 border-bottom">Edit summary</h4>
@@ -18,32 +19,38 @@
         <div class='form-group'>
             {{ form.summary.label_tag }}
             {{ form.summary|add_class:"form-control" }}
+            {{ form.media }}
         </div>
         <div class="form-group row">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <button type="submit" class="btn btn-primary float-right ">Submit</button>
             </div>
         </div>
     </form>
-    {{ form.media }}
     <a href="{% url 'book_manager:summary_list' book_id=book_id %}" class="btn btn-secondary mb-3">Back</a>
 </div>
 {% endblock content %}
 
+
 {% block extra_js %}
+
+{# langage-config for mdeditor #}
+<script src="/static/mdeditor/languages/en.js"></script>
+
+{# highlight of code snippets #}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>
-
-const elements = document.getElementsByClassName('markdownx');
+const elements = document.getElementsByTagName('editormd-preview-container');
 for (element of elements) {
-    element.addEventListener('markdownx.update', event => {
+    element.addEventListener('editormd-preview-container.update', event => {
         for (const block of document.querySelectorAll('pre code')) {
             hljs.highlightBlock(block);
         }
     });
 }
 </script>
+
 {% endblock extra_js %}
 
 

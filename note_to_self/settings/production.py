@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'book_manager',
     'bootstrap4',
-    'markdownx',
+    'mdeditor',
     'widget_tweaks',  # bootstrap for form
 ]
 
