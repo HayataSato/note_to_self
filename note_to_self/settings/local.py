@@ -182,5 +182,4 @@ MDEDITOR_CONFIGS = {
         'lineWrapping': False,  # lineWrapping
         'lineNumbers': False  # lineNumbers
     }
-
 }
