@@ -1,6 +1,11 @@
 {% extends "book_manager/base.html" %}
 {% load widget_tweaks %}
+{% load static %}
 {% block title %}Edit summary -- Note to Self{% endblock title %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'book_manager/css/book_manager/mdeditor.css' %}">
+{% endblock head %}
 
 
 {% block content %}
