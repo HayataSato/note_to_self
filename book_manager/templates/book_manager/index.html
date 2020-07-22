@@ -24,20 +24,20 @@
             {% for book in book %}
                 {% if book.status == False %}
                     <tr>
-                      <td class="task_name align-middle position-relative">
-                          <a class="stretched-link text-decoration-none" href="{% url 'book_manager:summary_list' book_id=book.id %}">{{ book.name }}</a>
+                      <td class="align-middle position-relative">
+                          <a class="stretched-link text-decoration-none" href="{% url 'book_manager:summary_list' book_id=book.id %}"><span class="book-name">{{ book.name }}</span></a>
                       </td>
-                      <td class="task_time align-middle">{{ book.category }}</td>
-                      <td class="task_time align-middle">{{ book.time }}</td>
-                      <td class="task_rgst align-middle">{{ book.rgst }}</td>
-                      <td class="task_ops" >
+                      <td class="align-middle">{{ book.category }}</td>
+                      <td class="align-middle">{{ book.time }}</td>
+                      <td class="align-middle">{{ book.rgst }}</td>
+                      <td>
                         <div class="d-flex flex-row justify-content-around align-items-center">
                             <button class="btn btn-outline-primary btn-sm done_confirm" data-toggle="modal" data-target="#doneModal" data-name="{{ book.name }}" data-url="{% url 'book_manager:book_status' book_id=book.id %}">Done</button>
                             <a href="{% url 'book_manager:book_edit' book_id=book.id %}" class="btn btn-outline-info btn-sm">Mod</a>
                             <button class="btn btn-outline-danger btn-sm del_confirm" data-toggle="modal" data-target="#deleteModal" data-name="{{ book.name }}" data-url="{% url 'book_manager:book_del' book_id=book.id %}">Del</button>
                         </div>
                       </td>
-                      <th scope="row" class="task_pri align-middle text-center">{{ book.pri }}</th>
+                      <th scope="row" class="align-middle text-center">{{ book.pri }}</th>
                     </tr>
                 {% endif %}
             {% endfor %}
@@ -144,6 +144,7 @@
     <script type="text/javascript" src="{% static 'book_manager/js/get_book_time.js' %}"></script>
     <script type="text/javascript" src="{% static 'book_manager/js/timer.js' %}"></script>
 -->
+
 <!-- modal -->
 <script>
 $(function() {
@@ -176,7 +177,8 @@ $(document).ready(function() {
         "ajax": "{% url 'book_manager:archive' %}",
         "order": [[3, "desc"]],
         "columnDefs": [
-        { className:"position-relative", "targets":[0] }
+        { className:"position-relative align-middle", "targets":[0] },
+        { className: 'align-middle', targets:'_all'},
         ],
     });
 

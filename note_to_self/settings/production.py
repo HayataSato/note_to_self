@@ -158,7 +158,6 @@ MESSAGE_TAGS = {
 MDEDITOR_CONFIGS = {
     'default': {
         'width': '100% ',  # Custom edit box width
-        'heigth': '100% ',  # Custom edit box height
         'toolbar': ["undo", "redo", "|",
                     "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|",
                     "h1", "h2", "h3", "h5", "h6", "|",

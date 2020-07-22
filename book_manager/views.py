@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -19,6 +20,7 @@ def index(request):
     # 取得したタスクの登録日を年月日のみに書き換える（時間を削除）
     for i in range(len(book)):
         book[i].rgst = f'{book[i].rgst.year}年{book[i].rgst.month}月{book[i].rgst.day}日'
+        book[i].name = abbrevBookName(book[i].name)
     return render(request, 'book_manager/index.html', {
         'book': book,
     })
@@ -40,7 +42,7 @@ class ArchiveBookDT(BaseDatatableView):
     def render_column(self, row, column):
 
         if column == 'name':
-            return f'<a href="summary/{ row.pk }" class="stretched-link text-decoration-none" >{row.name}</a>'
+            return f'<a href="summary/{ row.pk }" class="stretched-link text-decoration-none" >{abbrevBookName(row.name)}</a>'
         elif column == 'rgst':
             rgst_jst = row.rgst.astimezone(datetime.timezone(datetime.timedelta(hours=+9)))
             rgst_jst_str = f'{rgst_jst.year}年{rgst_jst.month}月{rgst_jst.day}日'
@@ -180,6 +182,20 @@ def summary_del(request, book_id, summary_id):
     # DBから削除
     summary.delete()
     return redirect('book_manager:summary_list', book_id=book_id)
+
+
+def abbrevBookName(name):
+    n = 0
+    break_index = -1
+    for i in range(len(name)):
+        n += 1 if re.match(r"^[\x20-\x7e]*$", name[i]) else 2
+        if n >= 38:
+            break_index = i if i % 2 != 0 else i+1
+            break
+    result = name
+    if break_index != -1:
+        result = name[0:break_index] + "..."
+    return result
 
 
 ### 関数で定義した summary_edit のview(ハンドラ的なヤツ)
