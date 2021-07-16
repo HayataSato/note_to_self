@@ -24,7 +24,7 @@ class AuthEsa(AuthBase):
         self.token = token
 
     # リクエストヘッダーのAuthorizationパラメタにTOKENを追記
-    # Ex.) Authorization: Bearer 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
+    # Ex.) Authorization: Bearer ~~token~~
     def __call__(self, r):
         r.headers['Authorization'] = 'Bearer {}'.format(self.token)
         return r
